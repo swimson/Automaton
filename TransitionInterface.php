@@ -26,13 +26,4 @@ interface TransitionInterface
      * @return State
      */
     public function getTarget();
-
-
-    /**
-     * Is the transition reversible?
-     * @return bool
-     */
-    public function isReversible();
-
-
 }

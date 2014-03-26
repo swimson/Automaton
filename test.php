@@ -1,13 +1,14 @@
 <?php
 
-namespace StateMachine;
+include(__DIR__ . '/StateMachineInterface.php');
+include(__DIR__ . '/StateInterface.php');
+include(__DIR__ . '/TransitionInterface.php');
+include(__DIR__ . '/State.php');
+include(__DIR__ . '/StateMachine.php');
+include(__DIR__ . '/Transition.php');
 
-include('/var/www/StateMachineInterface.php');
-include('/var/www/StateInterface.php');
-include('/var/www/TransitionInterface.php');
-include('/var/www/State.php');
-include('/var/www/StateMachine.php');
-include('/var/www/Transition.php');
+use StateMachine\State;
+use StateMachine\StateMachine;
 
 // States Available
 $child   = new State('child');
@@ -59,16 +60,16 @@ $fsm->boot();
 <h2>Process Event <em>engagement</em></h2>
 <?php echo $fsm->process('engagement')->getCurrentState(); ?>
 
-<h2>Undo Engagement</h2>
+<h2>Undo <em>Engagement</em></h2>
 <?php echo $fsm->undo()->getCurrentState(); ?>
 
-<h2>Try to Skip To Married</h2>
+<h2>Try to Skip To <em>Married</em></h2>
 <?php echo $fsm->process('wedding')->getCurrentState(); ?>
 
 <h2>Get Engaged a Second Time and Get Married</h2>
 <?php echo $fsm->process('engagement')->process('wedding')->getCurrentState(); ?>
 
-<h2>Unable to Undo Marriage</h2>
+<h2>Unable to Undo <em>Marriage</em></h2>
 <?php echo $fsm->undo()->getCurrentState(); ?>
 
 <h2>Person Dies</h2>

@@ -64,13 +64,4 @@ class Transition implements TransitionInterface
     {
         return $this->event;
     }
-
-
-    /**
-     * @inheritDoc
-     */
-    public function isReversible()
-    {
-        return $this->reversible;
-    }
 }
