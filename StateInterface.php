@@ -18,9 +18,15 @@ interface StateInterface
 
     /**
      * Add Transition
-     * @param EventInterface $event
+     * @param string $event
      * @param StateInterface $targetState
      * @return null
      */
-    public function addTransition(EventInterface $event, StateInterface $targetState);
+    public function addTransition($event, StateInterface $targetState);
+
+    /**
+     * Returns an array of Transition objects
+     * @return array
+     */
+    public function getTransitions();
 }

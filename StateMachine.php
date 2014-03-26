@@ -2,26 +2,190 @@
 
 namespace StateMachine;
 
-
 class StateMachine implements StateMachineInterface
 {
 
-    private $start;
-    private $states = array();
-    private $targets = array();
+    const STATE_INITIAL      = 0;
+    const STATE_INTERMEDIATE = 1;
+    const STATE_FINAL        = 2;
 
-    public function __construct(StateInterface $start){
-        $this->start = $start;
+    /**
+     * @var array
+     */
+    private $states;
+
+    /**
+     * @var StateInterface
+     */
+    private $currentState;
+
+    /**
+     * @var StateInterface
+     */
+    private $priorState;
+
+
+    public function __construct(StateInterface $start)
+    {
+        $this->currentState = $start;
+        $this->priorState   = $start;
     }
 
-    public function getStates()
+    /**
+     * @inheritDoc
+     */
+    public function addState(StateInterface $state)
     {
-        // TODO: Implement getStates() method.
+        $this->states[$state->getName()] = $state;
+
+        return $this;
     }
 
-    public function getAllTargets()
+    /**
+     * @inheritDoc
+     */
+    public function removeState(StateInterface $state)
     {
-        // TODO: Implement getAllTargets() method.
+        if (array_key_exists($state->getName(), $this->states)) {
+            unset($this->states[$state->getName()]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAllStates()
+    {
+        return $this->states;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function boot()
+    {
+        // TODO: Implement boot() method.
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function is(StateInterface $state)
+    {
+        return $this->currentState->getName() == $state->getName();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCurrentState()
+    {
+        return $this->currentState;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function process($event)
+    {
+        if ($this->can($event)) {
+            $transitions = $this->currentState->getTransitions();
+            $targetState = $transitions[$event]->getTarget();
+            $this->transitionTo($targetState);
+        }
+
+        return $this;
+    }
+
+    private function transitionTo(StateInterface $targetState)
+    {
+        if ($this->currentState->getName() != $targetState->getName()) {
+            $this->priorState   = $this->currentState;
+            $this->currentState = $targetState;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPriorState()
+    {
+        return $this->priorState;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAvailableStates()
+    {
+        $transitions = $this->currentState->getTransitions();
+
+        $return = array();
+        foreach ($transitions as $transition) {
+            $targetName = $transition->getTarget()->getName();
+            if (!array_key_exists($targetName, $return)) {
+                $return[] = $transition->getTarget()->getName();
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function undo()
+    {
+        if ($this->canUndo()) {
+            $this->transitionTo($this->priorState);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns whether the Machine can go back to the prior state
+     * @return bool
+     */
+    public function canUndo()
+    {
+        return $this->canTransitionTo($this->priorState);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function can($event)
+    {
+        $return      = false;
+        $transitions = $this->currentState->getTransitions();
+        foreach ($transitions as $transition) {
+            if ($event == $transition->getEvent() ){
+                $return = true;
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function canTransitionTo(StateInterface $state)
+    {
+        $return      = false;
+        $transitions = $this->currentState->getTransitions();
+        foreach ($transitions as $transition) {
+            if ($state->getName() == $transition->getTarget()->getName()) {
+                $return = true;
+            }
+        }
+
+        return $return;
     }
 
 

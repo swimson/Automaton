@@ -23,14 +23,25 @@ class State implements StateInterface
         $this->name = $name;
     }
 
+    function __toString()
+    {
+        return $this->getName();
+    }
+
     /**
      * @inheritDoc
      */
-    public function addTransition(EventInterface $event, StateInterface $targetState)
+    public function addTransition($event, StateInterface $targetState)
     {
-        if($targetState){
-            $this->transitions[$event->getCode()] = new Transition($this, $event, $targetState);
-        }
+        $this->transitions[$event] = new Transition($this, $event, $targetState);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTransitions()
+    {
+        return $this->transitions;
     }
 
     /**
@@ -40,6 +51,4 @@ class State implements StateInterface
     {
         return $this->name;
     }
-
-
 } 

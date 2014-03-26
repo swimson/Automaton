@@ -2,21 +2,43 @@
 
 namespace StateMachine;
 
-class Transition implements  TransitionInterface
+class Transition implements TransitionInterface
 {
 
+    /**
+     * @var StateInterface
+     */
     private $source;
-    private $trigger;
+
+    /**
+     * @var string
+     */
+    private $event;
+
+    /**
+     * @var StateInterface
+     */
     private $target;
+
+    /**
+     * @var bool
+     */
+    private $reversible;
 
     /**
      * @inheritDoc
      */
-    public function __construct(StateInterface $source, EventInterface $trigger, StateInterface $target)
+    public function __construct(StateInterface $source, $event, StateInterface $target, $reversible = true)
     {
         $this->source = $source;
-        $this->trigger = $trigger;
+        $this->event = $event;
         $this->target = $target;
+        $this->reversible = true;
+    }
+
+    function __toString()
+    {
+        return $this->getName();
     }
 
     /**
@@ -38,9 +60,17 @@ class Transition implements  TransitionInterface
     /**
      * @inheritDoc
      */
-    public function getTrigger()
+    public function getEvent()
     {
-        return $this->trigger;
+        return $this->event;
     }
 
-} 
+
+    /**
+     * @inheritDoc
+     */
+    public function isReversible()
+    {
+        return $this->reversible;
+    }
+}

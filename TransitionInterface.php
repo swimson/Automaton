@@ -8,10 +8,11 @@ interface TransitionInterface
     /**
      * Constructor
      * @param StateInterface $source
-     * @param EventInterface $trigger
+     * @param string $event
      * @param StateInterface $target
+     * @param bool $reversible
      */
-    public function __construct(StateInterface $source, EventInterface $trigger, StateInterface $target);
+    public function __construct(StateInterface $source, $event, StateInterface $target, $reversible = true);
 
     /**
      * Get Source State
@@ -19,16 +20,19 @@ interface TransitionInterface
      */
     public function getSource();
 
-    /**
-     * Get Trigger Event
-     * @return Event
-     */
-    public function getTrigger();
 
     /**
      * Get Target State
      * @return State
      */
     public function getTarget();
+
+
+    /**
+     * Is the transition reversible?
+     * @return bool
+     */
+    public function isReversible();
+
 
 }
