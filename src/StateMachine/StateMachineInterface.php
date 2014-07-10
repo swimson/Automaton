@@ -15,6 +15,7 @@ interface StateMachineInterface
      * Add a state to the Machine
      * @param StateInterface $state
      * @return StateMachine
+     * @throws \StateMachine\Exception\AlterStateMachineException
      */
     public function addState(StateInterface $state);
 
@@ -22,6 +23,7 @@ interface StateMachineInterface
      * Removes a state from the Machine
      * @param StateInterface $state
      * @return StateMachine
+     * @throws \StateMachine\Exception\AlterStateMachineException
      */
     public function removeState(StateInterface $state);
 
@@ -39,6 +41,7 @@ interface StateMachineInterface
     /**
      * Returns the current state
      * @return State
+     * @throws \StateMachine\Exception\StateMachineUnavailableException
      */
     public function getState();
 
@@ -52,6 +55,7 @@ interface StateMachineInterface
      * Checks if the Machine is in a given state
      * @param StateInterface $state
      * @return bool
+     * @throws \StateMachine\Exception\StateMachineUnavailableException
      */
     public function isCurrently(StateInterface $state);
 
@@ -59,6 +63,7 @@ interface StateMachineInterface
      * Returns whether the state is available to transition to
      * @param StateInterface $state
      * @return bool
+     * @throws \StateMachine\Exception\StateMachineUnavailableException
      */
     public function isAvailable(StateInterface $state);
 
@@ -75,6 +80,7 @@ interface StateMachineInterface
     /**
      * Get the list of active event - those that will trigger a state change
      * @return array
+     * @throws \StateMachine\Exception\StateMachineUnavailableException
      */
     public function getActiveEvents();
 
@@ -82,6 +88,7 @@ interface StateMachineInterface
      * Will the event trigger a state change?
      * @param string $event
      * @return boolean
+     * @throws \StateMachine\Exception\StateMachineUnavailableException
      */
     public function isActive($event);
 
@@ -89,6 +96,7 @@ interface StateMachineInterface
      * Triggers an Event within the Machine
      * @param string $event
      * @return StateMachine
+     * @throws \StateMachine\Exception\StateMachineUnavailableException
      */
     public function trigger($event);
 
@@ -99,15 +107,15 @@ interface StateMachineInterface
 
     /**
      * Boots the finite state machine
+     * @param StateInterface $startingState
      * @return StateMachine
-     * @throws \Exception
+     * @throws \StateMachine\Exception\StateMachineUnavailableException
      */
-    public function boot();
+    public function boot(StateInterface $startingState);
 
     /**
      * Turns off the finite state machine
      * @return StateMachine
-     * @throws \Exception
      */
     public function stop();
 

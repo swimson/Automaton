@@ -12,11 +12,11 @@ interface StateInterface
 
     /**
      * Add Transition
-     * @param string $event
      * @param TransitionInterface $transition
+     * @throws \StateMachine\Exception\InvalidTransitionException
      * @return null
      */
-    public function addTransition( $event, TransitionInterface $transition);
+    public function addTransition(TransitionInterface $transition);
 
     /**
      * Returns an array of Transition objects
@@ -29,4 +29,10 @@ interface StateInterface
      * @return array
      */
     public function getEvents();
+
+    /**
+     * Returns an array of events that are available from this state
+     * @return array
+     */
+    public function getActiveEvents();
 }

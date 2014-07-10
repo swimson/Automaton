@@ -16,4 +16,9 @@ interface TransitionInterface
      * @return State
      */
     public function getTarget();
+
+    /**
+     * @return string
+     */
+    public function getEvent();
 }

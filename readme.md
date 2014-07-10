@@ -1,4 +1,7 @@
 Ideas
-- Decide whether to remove Undo() or incorporate History <-- might be a bad ide
-- Change events from string -> Object
-- Change namespace to Swimson\StateMachine
+-- Unable to add/remove states once booted
+-- Unable to get current state if not booted;
+-- Able to add transitions after booted;
+
+
+

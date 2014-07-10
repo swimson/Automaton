@@ -2,13 +2,16 @@
 
 namespace StateMachine;
 
+use StateMachine\Exception\AlterStateMachineException;
+use StateMachine\Exception\StateMachineUnavailableException;
+
 class StateMachine implements StateMachineInterface
 {
 
     /**
      * @var array
      */
-    private $states;
+    private $states = array();
 
     /**
      * @var StateInterface
@@ -21,9 +24,8 @@ class StateMachine implements StateMachineInterface
     private $machineStatus;
 
 
-    public function __construct(StateInterface $start)
+    public function __construct()
     {
-        $this->currentState  = $start;
         $this->machineStatus = self::STATE_MACHINE_OFF;
     }
 
@@ -32,6 +34,11 @@ class StateMachine implements StateMachineInterface
      */
     public function addState(StateInterface $state)
     {
+
+        if($this->isBooted()){
+            throw new AlterStateMachineException();
+        }
+
         $this->states[$state->getName()] = $state;
 
         return $this;
@@ -42,6 +49,10 @@ class StateMachine implements StateMachineInterface
      */
     public function removeState(StateInterface $state)
     {
+        if($this->isBooted()){
+            throw new AlterStateMachineException();
+        }
+
         if (array_key_exists($state->getName(), $this->states)) {
             unset($this->states[$state->getName()]);
         }
@@ -62,6 +73,10 @@ class StateMachine implements StateMachineInterface
      */
     public function getState()
     {
+        if(!$this->isBooted()){
+            throw new StateMachineUnavailableException();
+        }
+
         return $this->currentState;
     }
 
@@ -70,17 +85,22 @@ class StateMachine implements StateMachineInterface
      */
     public function getAvailableStates()
     {
-        $transitions = $this->currentState->getTransitions();
-
         $return = array();
-        foreach ($transitions as $transition) {
+
+        if(!$this->isBooted()){
+            throw new StateMachineUnavailableException();
+        }
+
+        foreach ($this->currentState->getTransitions() as $transition) {
 
             /** @var Transition $transition */
             $targetName = $transition->getTarget()->getName();
+
             if (!array_key_exists($targetName, $return)) {
-                $return[] = $transition->getTarget()->getName();
+                $return[] = $transition->getTarget();
             }
         }
+
 
         return $return;
     }
@@ -90,6 +110,10 @@ class StateMachine implements StateMachineInterface
      */
     public function isCurrently(StateInterface $state)
     {
+        if(!$this->isBooted()){
+            throw new StateMachineUnavailableException();
+        }
+
         return $this->currentState->getName() == $state->getName();
     }
 
@@ -98,6 +122,10 @@ class StateMachine implements StateMachineInterface
      */
     public function isAvailable(StateInterface $state)
     {
+        if(!$this->isBooted()){
+            throw new StateMachineUnavailableException();
+        }
+
         $return      = false;
         $transitions = $this->currentState->getTransitions();
         foreach ($transitions as $transition) {
@@ -136,7 +164,11 @@ class StateMachine implements StateMachineInterface
      */
     public function getActiveEvents()
     {
-        return $this->currentState->getEvents();
+        if(!$this->isBooted()){
+            throw new StateMachineUnavailableException();
+        }
+
+        return $this->currentState->getActiveEvents();
     }
 
     /**
@@ -144,6 +176,10 @@ class StateMachine implements StateMachineInterface
      */
     public function isActive($event)
     {
+        if(!$this->isBooted()){
+            throw new StateMachineUnavailableException();
+        }
+
         return in_array($event, $this->getActiveEvents());
     }
 
@@ -152,6 +188,10 @@ class StateMachine implements StateMachineInterface
      */
     public function trigger($event)
     {
+        if(!$this->isBooted()){
+            throw new StateMachineUnavailableException();
+        }
+
         if ($this->isActive($event)) {
             $transitions = $this->currentState->getTransitions();
 
@@ -168,11 +208,12 @@ class StateMachine implements StateMachineInterface
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function boot(StateInterface $startingState)
     {
         if ($this->machineStatus == self::STATE_MACHINE_BOOTED) {
-            throw new \Exception('State Machine already booted');
+            throw new AlterStateMachineException();
         }
+        $this->currentState = $startingState;
         $this->machineStatus = self::STATE_MACHINE_BOOTED;
 
         return $this;
@@ -183,6 +224,7 @@ class StateMachine implements StateMachineInterface
      */
     public function stop()
     {
+        $this->currentState = null;
         $this->machineStatus = self::STATE_MACHINE_OFF;
 
         return $this;
