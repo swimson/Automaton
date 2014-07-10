@@ -45,4 +45,24 @@ class State implements StateInterface
     {
         return $this->name;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEvents()
+    {
+        $return      = array();
+        $transitions = $this->getTransitions();
+
+        foreach ($transitions as $transition) {
+
+            /** @var $transition Transition */
+            $event = $transition->getEvent();
+            if (!in_array($event, $return)) {
+                $return[] = $event;
+            }
+        }
+
+        return $return;
+    }
 } 

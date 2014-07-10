@@ -23,4 +23,10 @@ interface StateInterface
      * @return array
      */
     public function getTransitions();
+
+    /**
+     * Returns an array of events that are available for this state
+     * @return array
+     */
+    public function getEvents();
 }

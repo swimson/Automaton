@@ -5,10 +5,6 @@ namespace StateMachine;
 class StateMachine implements StateMachineInterface
 {
 
-    const STATE_INITIAL      = 0;
-    const STATE_INTERMEDIATE = 1;
-    const STATE_FINAL        = 2;
-
     /**
      * @var array
      */
@@ -19,11 +15,16 @@ class StateMachine implements StateMachineInterface
      */
     private $currentState;
 
+    /**
+     * @var int
+     */
+    private $machineStatus;
+
 
     public function __construct(StateInterface $start)
     {
-        $this->currentState = $start;
-        $this->priorState   = $start;
+        $this->currentState  = $start;
+        $this->machineStatus = self::STATE_MACHINE_OFF;
     }
 
     /**
@@ -56,52 +57,12 @@ class StateMachine implements StateMachineInterface
         return $this->states;
     }
 
-
     /**
      * @inheritDoc
      */
-    public function boot()
-    {
-        // TODO: Implement boot() method.
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function is(StateInterface $state)
-    {
-        return $this->currentState->getName() == $state->getName();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCurrentState()
+    public function getState()
     {
         return $this->currentState;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function process($event)
-    {
-        if ($this->can($event)) {
-            $transitions = $this->currentState->getTransitions();
-            $targetState = $transitions[$event]->getTarget();
-            $this->transitionTo($targetState);
-        }
-
-        return $this;
-    }
-
-    private function transitionTo(StateInterface $targetState)
-    {
-        if ($this->currentState->getName() != $targetState->getName()) {
-            $this->priorState   = $this->currentState;
-            $this->currentState = $targetState;
-        }
     }
 
     /**
@@ -113,6 +74,8 @@ class StateMachine implements StateMachineInterface
 
         $return = array();
         foreach ($transitions as $transition) {
+
+            /** @var Transition $transition */
             $targetName = $transition->getTarget()->getName();
             if (!array_key_exists($targetName, $return)) {
                 $return[] = $transition->getTarget()->getName();
@@ -122,31 +85,24 @@ class StateMachine implements StateMachineInterface
         return $return;
     }
 
-
     /**
      * @inheritDoc
      */
-    public function can($event)
+    public function isCurrently(StateInterface $state)
     {
-        $return      = false;
-        $transitions = $this->currentState->getTransitions();
-        foreach ($transitions as $transition) {
-            if ($event == $transition->getEvent()) {
-                $return = true;
-            }
-        }
-
-        return $return;
+        return $this->currentState->getName() == $state->getName();
     }
 
     /**
      * @inheritDoc
      */
-    public function canTransitionTo(StateInterface $state)
+    public function isAvailable(StateInterface $state)
     {
         $return      = false;
         $transitions = $this->currentState->getTransitions();
         foreach ($transitions as $transition) {
+
+            /** @var Transition $transition */
             if ($state->getName() == $transition->getTarget()->getName()) {
                 $return = true;
             }
@@ -154,4 +110,97 @@ class StateMachine implements StateMachineInterface
 
         return $return;
     }
-} 
+
+    /**
+     * @inheritDoc
+     */
+    public function getAllEvents()
+    {
+        $return = array();
+        foreach ($this->states as $state) {
+
+            /** @var State $state */
+            $events = $state->getEvents();
+            foreach ($events as $event) {
+                if (!in_array($event, $return)) {
+                    $return[] = $event;
+                }
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getActiveEvents()
+    {
+        return $this->currentState->getEvents();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isActive($event)
+    {
+        return in_array($event, $this->getActiveEvents());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function trigger($event)
+    {
+        if ($this->isActive($event)) {
+            $transitions = $this->currentState->getTransitions();
+
+            /** @var Transition $transition */
+            $transition  = $transitions[$event];
+            $targetState = $transition->getTarget();
+            $this->transitionTo($targetState);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function boot()
+    {
+        if ($this->machineStatus == self::STATE_MACHINE_BOOTED) {
+            throw new \Exception('State Machine already booted');
+        }
+        $this->machineStatus = self::STATE_MACHINE_BOOTED;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function stop()
+    {
+        $this->machineStatus = self::STATE_MACHINE_OFF;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isBooted()
+    {
+        return $this->machineStatus == self::STATE_MACHINE_BOOTED;
+    }
+
+
+    private function transitionTo(StateInterface $targetState)
+    {
+        if ($this->currentState->getName() != $targetState->getName()) {
+            $this->currentState = $targetState;
+        }
+    }
+}

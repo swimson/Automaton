@@ -4,6 +4,12 @@ namespace StateMachine;
 
 interface StateMachineInterface
 {
+    const STATE_MACHINE_OFF    = 0;
+    const STATE_MACHINE_BOOTED = 1;
+
+    /**************************************************************
+     * Initialization
+     **************************************************************/
 
     /**
      * Add a state to the Machine
@@ -20,10 +26,21 @@ interface StateMachineInterface
     public function removeState(StateInterface $state);
 
     /**
+     * Get all the states loaded into the machine
+     * @return array
+     */
+    public function getAllStates();
+
+
+    /**************************************************************
+     * Based on Current State
+     **************************************************************/
+
+    /**
      * Returns the current state
      * @return State
      */
-    public function getCurrentState();
+    public function getState();
 
     /**
      * Gets the available target states
@@ -32,42 +49,71 @@ interface StateMachineInterface
     public function getAvailableStates();
 
     /**
-     * Get all the states loaded into the machine
-     * @return array
-     */
-    public function getAllStates();
-
-    /**
-     * Boots the finite state machine
-     * @return StateMachine
-     */
-    public function boot();
-
-    /**
-     * Triggers an Event within the Machine
-     * @param string $event
-     * @return StateMachine
-     */
-    public function process($event);
-
-    /**
-     * Can an event be triggered within the Machine
-     * @param string $event
-     * @return bool
-     */
-    public function can($event);
-
-    /**
      * Checks if the Machine is in a given state
      * @param StateInterface $state
      * @return bool
      */
-    public function is(StateInterface $state);
+    public function isCurrently(StateInterface $state);
 
     /**
      * Returns whether the state is available to transition to
      * @param StateInterface $state
      * @return bool
      */
-    public function canTransitionTo(StateInterface $state);
+    public function isAvailable(StateInterface $state);
+
+    /**************************************************************
+     * Events
+     **************************************************************/
+
+    /**
+     * Get all possible events
+     * @return array
+     */
+    public function getAllEvents();
+
+    /**
+     * Get the list of active event - those that will trigger a state change
+     * @return array
+     */
+    public function getActiveEvents();
+
+    /**
+     * Will the event trigger a state change?
+     * @param string $event
+     * @return boolean
+     */
+    public function isActive($event);
+
+    /**
+     * Triggers an Event within the Machine
+     * @param string $event
+     * @return StateMachine
+     */
+    public function trigger($event);
+
+
+    /**************************************************************
+     * StateMachine Boot
+     **************************************************************/
+
+    /**
+     * Boots the finite state machine
+     * @return StateMachine
+     * @throws \Exception
+     */
+    public function boot();
+
+    /**
+     * Turns off the finite state machine
+     * @return StateMachine
+     * @throws \Exception
+     */
+    public function stop();
+
+    /**
+     * Returns whether the state machine is booted
+     * @return boolean
+     */
+    public function isBooted();
 }
