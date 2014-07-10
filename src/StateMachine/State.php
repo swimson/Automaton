@@ -4,7 +4,6 @@ namespace StateMachine;
 
 class State implements StateInterface
 {
-
     /**
      * @var string
      */
@@ -23,17 +22,12 @@ class State implements StateInterface
         $this->name = $name;
     }
 
-    function __toString()
-    {
-        return $this->getName();
-    }
-
     /**
      * @inheritDoc
      */
-    public function addTransition($event, StateInterface $targetState)
+    public function addTransition($event, TransitionInterface $transition)
     {
-        $this->transitions[$event] = new Transition($this, $event, $targetState);
+        $this->transitions[$event] = $transition;
     }
 
     /**

@@ -131,10 +131,11 @@ class StateMachine implements StateMachineInterface
         $return      = false;
         $transitions = $this->currentState->getTransitions();
         foreach ($transitions as $transition) {
-            if ($event == $transition->getEvent() ){
+            if ($event == $transition->getEvent()) {
                 $return = true;
             }
         }
+
         return $return;
     }
 
@@ -153,6 +154,4 @@ class StateMachine implements StateMachineInterface
 
         return $return;
     }
-
-
 } 

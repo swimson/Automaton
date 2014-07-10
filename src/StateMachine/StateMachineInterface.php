@@ -2,9 +2,8 @@
 
 namespace StateMachine;
 
-interface StateMachineInterface{
-
-    public function __construct(StateInterface $start);
+interface StateMachineInterface
+{
 
     /**
      * Add a state to the Machine
@@ -49,7 +48,7 @@ interface StateMachineInterface{
      * @param string $event
      * @return StateMachine
      */
-    public function process( $event);
+    public function process($event);
 
     /**
      * Can an event be triggered within the Machine

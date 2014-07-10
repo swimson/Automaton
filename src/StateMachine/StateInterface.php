@@ -5,12 +5,6 @@ namespace StateMachine;
 interface StateInterface
 {
     /**
-     * Constructor
-     * @param string $name
-     */
-    public function __construct($name);
-
-    /**
      * Get Name
      * @return string
      */
@@ -19,10 +13,10 @@ interface StateInterface
     /**
      * Add Transition
      * @param string $event
-     * @param StateInterface $targetState
+     * @param TransitionInterface $transition
      * @return null
      */
-    public function addTransition($event, StateInterface $targetState);
+    public function addTransition( $event, TransitionInterface $transition);
 
     /**
      * Returns an array of Transition objects
