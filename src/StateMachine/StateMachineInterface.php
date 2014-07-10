@@ -33,12 +33,6 @@ interface StateMachineInterface{
     public function getAvailableStates();
 
     /**
-     * Returns the state the Machine was in previously
-     * @return State
-     */
-    public function getPriorState();
-
-    /**
      * Get all the states loaded into the machine
      * @return array
      */
@@ -63,18 +57,6 @@ interface StateMachineInterface{
      * @return bool
      */
     public function can($event);
-
-    /**
-     * Returns the State Machine to the Prior State (if available)
-     * @return StateMachine
-     */
-    public function undo();
-
-    /**
-     * Returns whether the Machine can go back to the prior state
-     * @return bool
-     */
-    public function canUndo();
 
     /**
      * Checks if the Machine is in a given state

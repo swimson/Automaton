@@ -19,11 +19,6 @@ class StateMachine implements StateMachineInterface
      */
     private $currentState;
 
-    /**
-     * @var StateInterface
-     */
-    private $priorState;
-
 
     public function __construct(StateInterface $start)
     {
@@ -112,14 +107,6 @@ class StateMachine implements StateMachineInterface
     /**
      * @inheritDoc
      */
-    public function getPriorState()
-    {
-        return $this->priorState;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getAvailableStates()
     {
         $transitions = $this->currentState->getTransitions();
@@ -133,27 +120,6 @@ class StateMachine implements StateMachineInterface
         }
 
         return $return;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function undo()
-    {
-        if ($this->canUndo()) {
-            $this->transitionTo($this->priorState);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns whether the Machine can go back to the prior state
-     * @return bool
-     */
-    public function canUndo()
-    {
-        return $this->canTransitionTo($this->priorState);
     }
 
 

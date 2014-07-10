@@ -1,0 +1,22 @@
+{
+    "name": "swimson/statemachine",
+    "description": "Simple state machine implementation",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kevin Simpson",
+            "email": "simpkevin@gmail.com"
+        }
+    ],
+    "require": {
+
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "StateMachine\\": "src/"
+        }
+    }
+}
