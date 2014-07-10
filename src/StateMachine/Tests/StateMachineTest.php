@@ -52,7 +52,8 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
         $this->state3       = new State('state3');
     }
 
-    public function setupMachine1() {
+    public function setupMachine1()
+    {
         /**
          * Transitions
          * 1 :=> 2
@@ -60,13 +61,9 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
          * 3: => No transitions
          */
 
-        $this->transition1 = new Transition($this->state1, 'event1-2', $this->state2);
-        $this->transition2 = new Transition($this->state2, 'event2-1', $this->state1);
-        $this->transition3 = new Transition($this->state2, 'event2-3', $this->state3);
-
-        $this->state1->addTransition($this->transition1);
-        $this->state2->addTransition($this->transition2);
-        $this->state2->addTransition($this->transition3);
+        $this->state1->addTransition('event1-2', $this->state2);
+        $this->state2->addTransition('event2-1', $this->state1);
+        $this->state2->addTransition('event2-3', $this->state3);
 
         $this->stateMachine->addState($this->state1);
         $this->stateMachine->addState($this->state2);
@@ -230,22 +227,22 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupMachine1();
         $this->stateMachine->boot($this->state1);
-        $this->assertEquals(array('event1-2', 'event2-1', 'event2-3'),$this->stateMachine->getAllEvents());
+        $this->assertEquals(array('event1-2', 'event2-1', 'event2-3'), $this->stateMachine->getAllEvents());
     }
 
     public function testGetActiveEvents()
     {
         $this->setupMachine1();
         $this->stateMachine->boot($this->state1);
-        $this->assertEquals(array('event1-2'),$this->stateMachine->getActiveEvents());
+        $this->assertEquals(array('event1-2'), $this->stateMachine->getActiveEvents());
         $this->stateMachine->stop();
 
         $this->stateMachine->boot($this->state2);
-        $this->assertEquals(array('event2-1','event2-3'),$this->stateMachine->getActiveEvents());
+        $this->assertEquals(array('event2-1', 'event2-3'), $this->stateMachine->getActiveEvents());
         $this->stateMachine->stop();
 
         $this->stateMachine->boot($this->state3);
-        $this->assertEquals(array(),$this->stateMachine->getActiveEvents());
+        $this->assertEquals(array(), $this->stateMachine->getActiveEvents());
     }
 
     /**

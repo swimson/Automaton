@@ -24,20 +24,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $state1 = new State('test1');
         $state2 = new State('test2');
 
-        $transition = new Transition($state1, 'event1', $state2);
-        $state1->addTransition($transition);
-        $this->assertEquals(array('event1' => $transition), $state1->getTransitions());
-    }
-
-    /**
-     * @expectedException \StateMachine\Exception\InvalidTransitionException
-     */
-    public function testAddTransitionException()
-    {
-        $state1 = new State('test1');
-        $state2 = new State('test2');
-
-        $transition = new Transition($state1, 'event1', $state2);
-        $state2->addTransition($transition);
+        $state1->addTransition('event1', $state2);
+        $this->assertEquals(1, count($state1->getTransitions()));
     }
 }

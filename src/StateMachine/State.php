@@ -2,8 +2,6 @@
 
 namespace StateMachine;
 
-use StateMachine\Exception\InvalidTransitionException;
-
 class State implements StateInterface
 {
     /**
@@ -27,12 +25,9 @@ class State implements StateInterface
     /**
      * @inheritDoc
      */
-    public function addTransition(TransitionInterface $transition)
+    public function addTransition($event, StateInterface $target)
     {
-        if($transition->getSource() != $this){
-            throw new InvalidTransitionException();
-        }
-
+        $transition = new Transition($this, $event, $target);
         $this->transitions[$transition->getEvent()] = $transition;
     }
 
@@ -80,11 +75,9 @@ class State implements StateInterface
         foreach ($transitions as $transition) {
 
             /** @var $transition Transition */
-            if($transition->getSource() == $this){
-                $event = $transition->getEvent();
-                if (!in_array($event, $return)) {
-                    $return[] = $event;
-                }
+            $event = $transition->getEvent();
+            if (!in_array($event, $return)) {
+                $return[] = $event;
             }
         }
 
