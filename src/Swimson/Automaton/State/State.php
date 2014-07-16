@@ -1,6 +1,8 @@
 <?php
 
-namespace StateMachine;
+namespace Swimson\Automaton\State;
+
+use Swimson\Automaton\Transition\Transition;
 
 class State implements StateInterface
 {
@@ -82,5 +84,10 @@ class State implements StateInterface
         }
 
         return $return;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 } 

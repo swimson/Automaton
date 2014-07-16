@@ -1,6 +1,8 @@
 <?php
 
-namespace StateMachine;
+namespace Swimson\Automaton\Transition;
+
+use Swimson\Automaton\State\StateInterface;
 
 class Transition implements TransitionInterface
 {

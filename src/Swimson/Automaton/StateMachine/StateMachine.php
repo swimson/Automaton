@@ -1,9 +1,10 @@
 <?php
 
-namespace StateMachine;
+namespace Swimson\Automaton\StateMachine;
 
-use StateMachine\Exception\AlterStateMachineException;
-use StateMachine\Exception\StateMachineUnavailableException;
+use Swimson\Automaton\Exception\AlterStateMachineException;
+use Swimson\Automaton\Exception\StateMachineUnavailableException;
+use Swimson\Automaton\State\StateInterface;
 
 class StateMachine implements StateMachineInterface
 {
@@ -14,7 +15,7 @@ class StateMachine implements StateMachineInterface
     private $states = array();
 
     /**
-     * @var StateInterface
+     * @var \Swimson\Automaton\State\StateInterface
      */
     private $currentState;
 
@@ -93,7 +94,7 @@ class StateMachine implements StateMachineInterface
 
         foreach ($this->currentState->getTransitions() as $transition) {
 
-            /** @var Transition $transition */
+            /** @var \Swimson\Automaton\Transition\Transition $transition */
             $targetName = $transition->getTarget()->getName();
 
             if (!array_key_exists($targetName, $return)) {
@@ -130,7 +131,7 @@ class StateMachine implements StateMachineInterface
         $transitions = $this->currentState->getTransitions();
         foreach ($transitions as $transition) {
 
-            /** @var Transition $transition */
+            /** @var \Swimson\Automaton\Transition\Transition $transition */
             if ($state->getName() == $transition->getTarget()->getName()) {
                 $return = true;
             }
@@ -147,7 +148,7 @@ class StateMachine implements StateMachineInterface
         $return = array();
         foreach ($this->states as $state) {
 
-            /** @var State $state */
+            /** @var \Swimson\Automaton\State\State $state */
             $events = $state->getEvents();
             foreach ($events as $event) {
                 if (!in_array($event, $return)) {
@@ -195,7 +196,7 @@ class StateMachine implements StateMachineInterface
         if ($this->isActive($event)) {
             $transitions = $this->currentState->getTransitions();
 
-            /** @var Transition $transition */
+            /** @var \Swimson\Automaton\Transition\Transition $transition */
             $transition  = $transitions[$event];
             $targetState = $transition->getTarget();
             $this->transitionTo($targetState);

@@ -1,46 +1,46 @@
 <?php
 
-namespace StateMachine\Tests;
+namespace Swimson\Automaton\Tests;
 
-use StateMachine\State;
-use StateMachine\StateMachine;
-use StateMachine\Transition;
+use Swimson\Automaton\State\State;
+use Swimson\Automaton\StateMachine\StateMachine;
+use Swimson\Automaton\Transition\Transition;
 
 class StateMachineTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var \StateMachine\StateMachine
+     * @var StateMachine
      */
     protected $stateMachine;
 
     /**
-     * @var \StateMachine\State
+     * @var State
      */
     protected $state1;
 
     /**
-     * @var \StateMachine\State
+     * @var State
      */
     protected $state2;
 
     /**
-     * @var \StateMachine\Transition
+     * @var Transition
      */
     protected $transition1;
 
     /**
-     * @var \StateMachine\Transition
+     * @var Transition
      */
     protected $transition2;
 
     /**
-     * @var \StateMachine\Transition
+     * @var Transition
      */
     protected $transition3;
 
     /**
-     * @var \StateMachine\State
+     * @var State
      */
     protected $state3;
 
@@ -72,7 +72,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
 
     public function testInterface()
     {
-        $this->assertInstanceOf('StateMachine\StateMachineInterface', $this->stateMachine);
+        $this->assertInstanceOf('Swimson\Automaton\StateMachine\StateMachineInterface', $this->stateMachine);
     }
 
     public function testAddState()
@@ -85,7 +85,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\AlterStateMachineException
+     * @expectedException \Swimson\Automaton\Exception\AlterStateMachineException
      */
     public function testExceptionOnAddingState()
     {
@@ -110,7 +110,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\AlterStateMachineException
+     * @expectedException \Swimson\Automaton\Exception\AlterStateMachineException
      */
     public function testExceptionOnRemovingState()
     {
@@ -147,7 +147,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\StateMachineUnavailableException
+     * @expectedException \Swimson\Automaton\Exception\StateMachineUnavailableException
      */
     public function testGetStateException()
     {
@@ -171,7 +171,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\StateMachineUnavailableException
+     * @expectedException \Swimson\Automaton\Exception\StateMachineUnavailableException
      */
     public function testGetAvailableStatesException()
     {
@@ -187,7 +187,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\StateMachineUnavailableException
+     * @expectedException \Swimson\Automaton\Exception\StateMachineUnavailableException
      */
     public function testIsCurrentlyException()
     {
@@ -215,7 +215,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\StateMachineUnavailableException
+     * @expectedException \Swimson\Automaton\Exception\StateMachineUnavailableException
      */
     public function testIsAvailableException()
     {
@@ -246,7 +246,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\StateMachineUnavailableException
+     * @expectedException \Swimson\Automaton\Exception\StateMachineUnavailableException
      */
     public function testGetActiveEventsException()
     {
@@ -264,7 +264,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\StateMachineUnavailableException
+     * @expectedException \Swimson\Automaton\Exception\StateMachineUnavailableException
      */
     public function testIsActiveException()
     {
@@ -284,7 +284,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\StateMachineUnavailableException
+     * @expectedException \Swimson\Automaton\Exception\StateMachineUnavailableException
      */
     public function testTriggerUnavailableException()
     {
@@ -300,7 +300,7 @@ class StateMachineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \StateMachine\Exception\AlterStateMachineException
+     * @expectedException \Swimson\Automaton\Exception\AlterStateMachineException
      */
     public function testBootException()
     {

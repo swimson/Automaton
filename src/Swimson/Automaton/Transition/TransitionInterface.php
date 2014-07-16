@@ -1,19 +1,19 @@
 <?php
 
-namespace StateMachine;
+namespace Swimson\Automaton\Transition;
 
 interface TransitionInterface
 {
     /**
      * Get Source State
-     * @return State
+     * @return \Swimson\Automaton\State\State
      */
     public function getSource();
 
 
     /**
      * Get Target State
-     * @return State
+     * @return \Swimson\Automaton\State\
      */
     public function getTarget();
 

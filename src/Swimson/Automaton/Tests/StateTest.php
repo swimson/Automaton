@@ -1,16 +1,15 @@
 <?php
 
-namespace StateMachine\Tests;
+namespace Swimson\StateMachine\Tests;
 
-use StateMachine\State;
-use StateMachine\Transition;
+use Swimson\Automaton\State\State;
 
 class StateTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testInterface()
     {
-        $this->assertInstanceOf('StateMachine\StateInterface', new State('test'));
+        $this->assertInstanceOf('Swimson\Automaton\State\StateInterface', new State('test'));
     }
 
     public function testGetName()

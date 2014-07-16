@@ -1,6 +1,6 @@
 <?php
 
-namespace StateMachine\Exception;
+namespace Swimson\Automaton\Exception;
 
 class StateMachineUnavailableException extends \Exception
 {

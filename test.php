@@ -1,11 +1,11 @@
 <?php
 
-include(__DIR__ . '/StateMachineInterface.php');
-include(__DIR__ . '/StateInterface.php');
-include(__DIR__ . '/TransitionInterface.php');
-include(__DIR__ . '/State.php');
-include(__DIR__ . '/StateMachine.php');
-include(__DIR__ . '/Transition.php');
+include(__DIR__ . '/src/StateMachine/StateMachineInterface.php');
+include(__DIR__ . '/src/StateMachine/StateInterface.php');
+include(__DIR__ . '/src/StateMachine/TransitionInterface.php');
+include(__DIR__ . '/src/StateMachine/State.php');
+include(__DIR__ . '/src/StateMachine/StateMachine.php');
+include(__DIR__ . '/src/StateMachine/Transition.php');
 
 use StateMachine\State;
 use StateMachine\StateMachine;
@@ -43,35 +43,27 @@ $fsm->addState($married);
 $fsm->addState($divorced);
 $fsm->addState($widowed);
 $fsm->addState($dead);
-$fsm->boot();
+$fsm->boot($child);
 ?>
 
-
-
 <h2>Initial State: </h2>
-<?php echo $fsm->getCurrentState(); ?>
-
-<h2>Available States</h2>
-<?php print_r($fsm->getAvailableStates()); ?>
+<?php echo $fsm->getState(); ?>
 
 <h2>Process Event <em>grows-up</em></h2>
-<?php echo $fsm->process('grows-up')->getCurrentState(); ?>
+<?php echo $fsm->trigger('grows-up')->getState(); ?>
 
 <h2>Process Event <em>engagement</em></h2>
-<?php echo $fsm->process('engagement')->getCurrentState(); ?>
+<?php echo $fsm->trigger('engagement')->getState(); ?>
 
-<h2>Undo <em>Engagement</em></h2>
-<?php echo $fsm->undo()->getCurrentState(); ?>
+<h2>Wedding Canceled</h2>
+<?php echo $fsm->trigger('wedding-canceled')->getState(); ?>
 
 <h2>Try to Skip To <em>Married</em></h2>
-<?php echo $fsm->process('wedding')->getCurrentState(); ?>
+<?php echo $fsm->trigger('wedding')->getState(); ?>
 
 <h2>Get Engaged a Second Time and Get Married</h2>
-<?php echo $fsm->process('engagement')->process('wedding')->getCurrentState(); ?>
-
-<h2>Unable to Undo <em>Marriage</em></h2>
-<?php echo $fsm->undo()->getCurrentState(); ?>
+<?php echo $fsm->trigger('engagement')->trigger('wedding')->getState(); ?>
 
 <h2>Person Dies</h2>
-<?php echo $fsm->process('death')->getCurrentState(); ?>
+<?php echo $fsm->trigger('death')->getState(); ?>
 

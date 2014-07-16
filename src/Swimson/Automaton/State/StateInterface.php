@@ -1,6 +1,6 @@
 <?php
 
-namespace StateMachine;
+namespace Swimson\Automaton\State;
 
 interface StateInterface
 {
